@@ -83,15 +83,14 @@ public:
 		return SKEEFixedString("");
 	}
 
-	void InsertBaseTransform(SKEEFixedString rootModel, SKEEFixedString nodeName, NiTransform transform = NiTransform()) {
+	bool InsertBaseTransform(SKEEFixedString rootModel, SKEEFixedString nodeName, NiTransform transform = NiTransform()) {
 		SimpleLocker lock(&transformCache.m_lock);
-		logger::info("3");
 		if (auto it = transformCache.m_data.find(rootModel); it != transformCache.m_data.end())
 		{
-			logger::info("4");
 			it->second[nodeName] = transform;
-			logger::info("5");
+			return true;
 		}
+		return false;
 	}
 	bool HasBaseTransform(SKEEFixedString rootModel) {
 		SimpleLocker lock(&transformCache.m_lock);

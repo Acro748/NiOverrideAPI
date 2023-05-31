@@ -487,16 +487,14 @@ public:
 		}
 	}
 
-	void InsertBaseTransform(TESObjectREFR* ref, const char* nodeName, NiTransform transform = NiTransform()) {
+	bool InsertBaseTransform(TESObjectREFR* ref, const char* nodeName, NiTransform transform = NiTransform()) {
 		Actor* actor = skyrim_cast<Actor*>(ref);
 		TESNPC* npc = actor ? actor->GetActorBase() : nullptr;
 		if (!npc)
-			return;
-		logger::info("1");
+			return false;
 		if (NiTransformInterface* nti = GetNiTransformInterface(); nti)
 		{
-			logger::info("2");
-			nti->InsertBaseTransform(nti->Impl_GetRootModelPath(ref, false, npc->GetSex()), nodeName, transform);
+			return nti->InsertBaseTransform(nti->Impl_GetRootModelPath(ref, false, npc->GetSex()), nodeName, transform);
 		}
 		else if (INiTransformInterface* nti = GetINiTransformInterface(); nti)
 		{
@@ -504,9 +502,10 @@ public:
 			NiTransformInterface* base_nti = static_cast<NiTransformInterface*>(pif);
 			if (base_nti)
 			{
-				base_nti->InsertBaseTransform(base_nti->Impl_GetRootModelPath(ref, false, npc->GetSex()), nodeName, transform);
+				return base_nti->InsertBaseTransform(base_nti->Impl_GetRootModelPath(ref, false, npc->GetSex()), nodeName, transform);
 			}
 		}
+		return false;
 	}
 	bool HasBaseTransform(TESObjectREFR* ref) {
 		Actor* actor = skyrim_cast<Actor*>(ref);
