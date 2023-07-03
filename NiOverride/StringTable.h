@@ -5,14 +5,13 @@
 #include <vector>
 #include <string>
 
-using namespace RE;
 class SKEEFixedString
 {
 public:
 	SKEEFixedString() : m_internal() { m_hash = hash_lower(m_internal.c_str(), m_internal.size()); }
 	SKEEFixedString(const char * str) : m_internal(str) { m_hash = hash_lower(m_internal.c_str(), m_internal.size()); }
 	SKEEFixedString(const std::string & str) : m_internal(str) { m_hash = hash_lower(m_internal.c_str(), m_internal.size()); }
-	SKEEFixedString(const BSFixedString & str) : m_internal(str.c_str()) { m_hash = hash_lower(m_internal.c_str(), m_internal.size()); }
+	SKEEFixedString(const RE::BSFixedString & str) : m_internal(str.c_str()) { m_hash = hash_lower(m_internal.c_str(), m_internal.size()); }
 
 	bool operator<(const SKEEFixedString& x) const
 	{
@@ -32,8 +31,8 @@ public:
 	
 	size_t length() const { return m_internal.size(); }
 
-	operator BSFixedString() const { return BSFixedString(m_internal.c_str()); }
-	BSFixedString AsBSFixedString() const { return operator BSFixedString(); }
+	operator RE::BSFixedString() const { return RE::BSFixedString(m_internal.c_str()); }
+	RE::BSFixedString AsBSFixedString() const { return operator RE::BSFixedString(); }
 
 	const char * c_str() const { return operator const char *(); }
 	operator const char *() const { return m_internal.c_str(); }

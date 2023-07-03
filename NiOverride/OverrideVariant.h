@@ -2,7 +2,6 @@
 
 #include "StringTable.h"
 
-using namespace RE;
 class OverrideVariant
 {
 public:
@@ -114,7 +113,7 @@ public:
 		str = std::shared_ptr<SKEEFixedString>(new SKEEFixedString(string));
 	}
 
-	void	SetColor(std::uint16_t paramKey, std::int8_t controllerIndex, NiColor color)
+	void	SetColor(std::uint16_t paramKey, std::int8_t controllerIndex, RE::NiColor color)
 	{
 		key = paramKey;
 		type = kType_Int;
@@ -123,7 +122,7 @@ public:
 		str = nullptr;
 	}
 
-	void	SetColorA(std::uint16_t paramKey, std::int8_t controllerIndex, NiColorA color)
+	void	SetColorA(std::uint16_t paramKey, std::int8_t controllerIndex, RE::NiColorA color)
 	{
 		key = paramKey;
 		type = kType_Int;
@@ -145,3 +144,28 @@ public:
 		return (key >= OverrideVariant::kParam_ControllersStart && key <= OverrideVariant::kParam_ControllersEnd) || key == OverrideVariant::kParam_ShaderTexture || (key >= OverrideVariant::kParam_NodeTransformStart && key <= OverrideVariant::kParam_NodeTransformEnd);
 	};
 };
+
+template <typename T>
+void PackValue(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, T* src);
+template <> void PackValue <float>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, float* src);
+template <> void PackValue <std::uint32_t>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, std::uint32_t* src);
+template <> void PackValue <std::int32_t>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, std::int32_t* src);
+template <> void PackValue <bool>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, bool* src);
+template <> void PackValue <std::string>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, std::string* src);
+template <> void PackValue <SKEEFixedString>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, SKEEFixedString* src);
+template <> void PackValue <RE::BSFixedString>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, RE::BSFixedString* src);
+template <> void PackValue <RE::NiColor>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, RE::NiColor* src);
+template <> void PackValue <RE::NiColorA>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, RE::NiColorA* src);
+template <> void PackValue <RE::BGSTextureSet*>(OverrideVariant* dst, std::uint16_t key, std::uint8_t index, RE::BGSTextureSet** src);
+
+template <typename T>
+void UnpackValue(T* dst, OverrideVariant* src);
+template <> void UnpackValue <float>(float* dst, OverrideVariant* src);
+template <> void UnpackValue <std::uint32_t>(std::uint32_t* dst, OverrideVariant* src);
+template <> void UnpackValue <std::int32_t>(std::int32_t* dst, OverrideVariant* src);
+template <> void UnpackValue <bool>(bool* dst, OverrideVariant* src);
+template <> void UnpackValue <SKEEFixedString>(SKEEFixedString* dst, OverrideVariant* src);
+template <> void UnpackValue <RE::BSFixedString>(RE::BSFixedString* dst, OverrideVariant* src);
+template <> void UnpackValue <RE::NiColor>(RE::NiColor* dst, OverrideVariant* src);
+template <> void UnpackValue <RE::NiColorA>(RE::NiColorA* dst, OverrideVariant* src);
+template <> void UnpackValue <RE::BGSTextureSet*>(RE::BGSTextureSet** dst, OverrideVariant* src);
